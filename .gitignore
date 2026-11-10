@@ -1,0 +1,5 @@
+# Pairing token - never commit
+data/
+.env
+__pycache__/
+*.pyc

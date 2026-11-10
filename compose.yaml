@@ -1,0 +1,26 @@
+services:
+  danbooru-bridge:
+    image: python:3.12-alpine
+    container_name: danbooru-bridge
+    restart: unless-stopped
+    working_dir: /app
+    command: python /app/danbooru_bridge.py
+    volumes:
+      # The repository folder: script + data/ (pairing token, keep it)
+      - ./:/app
+    environment:
+      # Where the bridge reaches Monbooru
+      MONBOORU_URL: http://192.168.1.10:8080
+      # Where Monbooru reaches the bridge (LAN IP of this host + host port below)
+      BRIDGE_SELF_URL: http://192.168.1.20:8456
+      BRIDGE_DATA_DIR: /app/data
+      # Long random string, e.g. from: openssl rand -hex 24
+      BRIDGE_API_KEY: change-me
+      # Optional: only allow these client networks
+      BRIDGE_ALLOW: 192.168.1.0/24
+      # Optional: HTTPS address the apps use (behind a reverse proxy)
+      # BRIDGE_PUBLIC_URL: https://dan.example.org
+      # Optional: let apps add/remove Monbooru favorites
+      # BRIDGE_FAVORITES: "1"
+    ports:
+      - "8456:8456"
